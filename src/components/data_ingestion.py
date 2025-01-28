@@ -1,14 +1,17 @@
 import os  # Module to interact with the operating system, like file and directory handling
 import sys  # Provides system-specific parameters and functions
-from src.exception import CustomException  # Custom module to handle exceptions
-from src.logger import logging  # Custom module for logging
+from src.exception import CustomException  
+from src.logger import logging  
 
-import pandas as pd  # Library for data manipulation and analysis
-from sklearn.model_selection import train_test_split  # For splitting data into training and testing sets
-from dataclasses import dataclass  # To define classes with built-in methods like __init__ for creating and managing data attributes
+import pandas as pd  
+from sklearn.model_selection import train_test_split  
+from dataclasses import dataclass  
 
 from src.components.data_transformation import DataTransformation
 from src.components.data_transformation import DataTransformationConfig
+
+from src.components.model_trainer import ModelTrainerConfig
+from src.components.model_trainer import ModelTrainer
 
 # Define a configuration class to store file paths for data ingestion
 @dataclass
@@ -28,10 +31,10 @@ class DataIngestion:
 
     # Method to handle the data ingestion process
     def initiate_data_ingestion(self):
-        logging.info("Enter the dataIngestion Method or Component")  # Log entry message
+        logging.info("Enter the dataIngestion Method or Component") 
         try:
-            # Read the dataset from a CSV file
-            df = pd.read_csv('notebook\data\stud.csv')
+            
+            df = pd.read_csv('notebook\data\stud.csv') # Read the dataset from a CSV file , you can read data from anywhere
             logging.info("Read the dataset as dataframe")
 
             # Create the directory for storing data files if it doesn't exist
@@ -55,8 +58,8 @@ class DataIngestion:
             # Return the file paths for the train and test datasets
             return (self.ingestion_config.train_data_path, self.ingestion_config.test_data_path)
         except Exception as e:
-            # Handle any exceptions by raising a CustomException
-            raise CustomException(e, sys)
+            
+            raise CustomException(e, sys)    # Handle any exceptions by raising a CustomException
 
 # Entry point of the script
 if __name__ == "__main__":
@@ -67,5 +70,8 @@ if __name__ == "__main__":
 
     data_transformation=DataTransformation()
     train_arr,test_arr,_=data_transformation.initiate_data_transformation(train_data,test_data)
+
+    model_trainser = ModelTrainer()
+    print(model_trainser.initiate_model_trainer(train_arr,test_arr))
 
     
